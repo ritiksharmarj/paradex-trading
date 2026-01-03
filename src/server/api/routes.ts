@@ -12,3 +12,9 @@ export const BASE_URL = {
   APP: APP_DOMAIN,
   PARADEX: PARADEX_DOMAIN,
 };
+
+export const API_URL = {
+  PARADEX: {
+    MARKETS: "/markets",
+  },
+};
