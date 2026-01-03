@@ -1,6 +1,6 @@
-import { ActivePositions } from "@/components/layout/active-positions";
 import { Header } from "@/components/layout/header";
 import { Market } from "@/components/layout/market";
+import { Positions } from "@/components/layout/positions";
 import { TradingPanel } from "@/components/layout/trading-panel";
 
 export default function Home() {
@@ -9,7 +9,7 @@ export default function Home() {
       <Header />
       <Market />
       <TradingPanel />
-      <ActivePositions />
+      <Positions />
     </div>
   );
 }
