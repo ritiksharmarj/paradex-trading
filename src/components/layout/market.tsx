@@ -10,18 +10,28 @@ import {
   ResponsiveSelectTrigger,
 } from "@/components/ui/responsive-select";
 import { useGetMarkets } from "@/hooks/use-paradex";
+import type { Market as MarketType } from "@/lib/types";
+import { useActionContext } from "@/providers/action";
 import { Card } from "../ui/card";
 import { Skeleton } from "../ui/skeleton";
 
 export function Market() {
   const { data, isLoading } = useGetMarkets();
   const [selectedMarket, setSelectedMarket] = React.useState("");
+  const { setSelectedMarket: setMarketChange } = useActionContext();
 
   React.useEffect(() => {
     if (data?.results && data.results.length > 0 && !selectedMarket) {
-      setSelectedMarket(data.results[0].symbol);
+      const firstMarket = data.results[0].symbol;
+      setSelectedMarket(firstMarket);
+      setMarketChange(data.results[0]);
     }
-  }, [data, selectedMarket]);
+  }, [data, selectedMarket, setMarketChange]);
+
+  function handleMarketChange(market: MarketType) {
+    setSelectedMarket(market.symbol);
+    setMarketChange(market);
+  }
 
   return (
     <Card
@@ -29,8 +39,8 @@ export function Market() {
       className="h-20 flex-row gap-0 overflow-hidden p-0"
     >
       {isLoading ? (
-        <div className="flex items-center p-3">
-          <Skeleton className="h-9 w-48" />
+        <div className="flex w-48 items-center px-6">
+          <Skeleton className="h-9 w-full" />
         </div>
       ) : (
         <ResponsiveSelect>
@@ -50,7 +60,7 @@ export function Market() {
                   <ResponsiveSelectItem
                     key={market.symbol}
                     value={market.symbol}
-                    onSelect={() => setSelectedMarket(market.symbol)}
+                    onSelect={() => handleMarketChange(market)}
                     isItemSelected={market.symbol === selectedMarket}
                   >
                     {market.symbol}

@@ -31,7 +31,7 @@ export function Header() {
       data-slot="header"
       className="col-span-full flex items-center justify-between"
     >
-      <div className="font-mono font-bold text-2xl select-none">Paradex</div>
+      <div className="select-none font-bold font-mono text-2xl">Paradex</div>
 
       <ConnectButton.Custom>
         {({ account, chain, openConnectModal, mounted }) => {
@@ -41,8 +41,8 @@ export function Header() {
             <>
               {!mounted && (
                 <div className="flex items-center gap-2">
-                  <Skeleton className="w-30 h-9" />
-                  <Skeleton className="w-30 h-9" />
+                  <Skeleton className="h-9 w-30" />
+                  <Skeleton className="h-9 w-30" />
                 </div>
               )}
 

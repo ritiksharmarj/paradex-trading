@@ -9,6 +9,7 @@ import {
 import { WagmiProvider } from "wagmi";
 import { Toaster } from "@/components/ui/sonner";
 import { config } from "@/lib/wagmi";
+import { ActionProvider } from "./action";
 
 function makeQueryClient() {
   return new QueryClient({
@@ -38,7 +39,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider>
-          {children}
+          <ActionProvider>{children}</ActionProvider>
           <Toaster />
         </RainbowKitProvider>
       </QueryClientProvider>
