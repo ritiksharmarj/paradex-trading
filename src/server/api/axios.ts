@@ -31,3 +31,15 @@ const http = async <T = any>(
 
 export const getRequest = (config: AxiosRequestConfigOption) =>
   http("get", config);
+
+export const postRequest = (config: AxiosRequestConfigOption) =>
+  http("post", config);
+
+export const putRequest = (config: AxiosRequestConfigOption) =>
+  http("put", config);
+
+export const patchRequest = (config: AxiosRequestConfigOption) =>
+  http("patch", config);
+
+export const deleteRequest = (config: AxiosRequestConfigOption) =>
+  http("delete", config);

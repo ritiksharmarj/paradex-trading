@@ -5,7 +5,7 @@ export const APP_DOMAIN =
 
 export const PARADEX_DOMAIN =
   process.env.NODE_ENV === "production"
-    ? process.env.NEXT_PUBLIC_PARADEX_API_URL
+    ? "https://api.prod.paradex.trade/v1"
     : "https://api.testnet.paradex.trade/v1";
 
 export const BASE_URL = {
@@ -15,6 +15,12 @@ export const BASE_URL = {
 
 export const API_URL = {
   PARADEX: {
+    AUTH: "/auth",
+    ONBOARDING: "/onboarding",
+    SYSTEM_CONFIG: "/system/config",
     MARKETS: "/markets",
+    ACCOUNT: "/account",
+    POSITIONS: "/account/positions",
+    ORDERS: "/orders",
   },
 };

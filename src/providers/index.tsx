@@ -39,8 +39,10 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider>
-          <ActionProvider>{children}</ActionProvider>
-          <Toaster />
+          <ActionProvider>
+            {children}
+            <Toaster />
+          </ActionProvider>
         </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>

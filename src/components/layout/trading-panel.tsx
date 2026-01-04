@@ -29,6 +29,17 @@ const MOCK_BALANCE = 500;
 export function TradingPanel() {
   const connection = useConnection();
   const { selectedMarket } = useActionContext();
+  // const {
+  //   paradex,
+  //   isConnecting: isParadexConnecting,
+  //   isConnected: isParadexConnected,
+  //   error: paradexError,
+  //   handleConnect,
+  // } = useParadexContext();
+
+  const isWalletDisconnected = connection.status === "disconnected";
+  const isWalletConnected = connection.status === "connected";
+  const isWalletConnecting = connection.status === "connecting";
 
   const form = useForm<tradingFormSchemaType>({
     resolver: zodResolver(tradingFormSchema),
@@ -121,7 +132,7 @@ export function TradingPanel() {
         </form>
       </Form>
 
-      {connection.status === "disconnected" ? (
+      {(isWalletDisconnected || isWalletConnecting) && (
         <ConnectButton.Custom>
           {({ openConnectModal }) => {
             return (
@@ -129,16 +140,33 @@ export function TradingPanel() {
                 <p className="mt-1 mb-2 text-sm">
                   Connect your wallet to start trading
                 </p>
-                <Button className="w-full" onClick={openConnectModal}>
+                <Button
+                  className="w-full"
+                  onClick={openConnectModal}
+                  disabled={isWalletConnecting}
+                >
                   Connect Wallet
                 </Button>
               </div>
             );
           }}
         </ConnectButton.Custom>
-      ) : connection.status === "connecting" ? (
-        <Button disabled>Connecting...</Button>
-      ) : (
+      )}
+
+      {/* {isWalletConnected && !isParadexConnected && (
+        <div className="flex flex-col items-center rounded-[12px] bg-muted p-1">
+          <p className="mt-1 mb-2 text-sm">Sign message to access trading</p>
+          <Button
+            className="w-full"
+            onClick={handleConnect}
+            disabled={isParadexConnecting}
+          >
+            Connect Paradex Exchange
+          </Button>
+        </div>
+      )} */}
+
+      {isWalletConnected && (
         <Button type="submit" form="trading-form">
           Place Trade
         </Button>
