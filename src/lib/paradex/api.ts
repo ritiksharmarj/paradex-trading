@@ -2,7 +2,13 @@ import { shortString } from "starknet";
 import { getRequest, postRequest } from "@/server/api/axios";
 import { API_URL } from "@/server/api/routes";
 import { signAuthRequest, signOnboardingRequest, signOrder } from "./signature";
-import type { Account, AccountInfo, Market, SystemConfig } from "./types";
+import type {
+  Account,
+  AccountInfo,
+  OrderParams,
+  Position,
+  SystemConfig,
+} from "./types";
 
 export class ParadexAPI {
   private config: SystemConfig;
@@ -69,7 +75,7 @@ export class ParadexAPI {
     });
   }
 
-  async getPositions(): Promise<{ results: any[] }> {
+  async getPositions(): Promise<{ results: Position[] }> {
     if (!this.account.jwtToken) {
       throw new Error("Not authenticated");
     }
@@ -83,14 +89,7 @@ export class ParadexAPI {
     });
   }
 
-  async createOrder(orderDetails: {
-    market: string;
-    side: "BUY" | "SELL";
-    type: "MARKET" | "LIMIT";
-    size: string;
-    price?: string;
-    instruction?: string;
-  }): Promise<any> {
+  async createOrder(params: OrderParams): Promise<any> {
     if (!this.account.jwtToken) {
       throw new Error("Not authenticated");
     }
@@ -99,13 +98,7 @@ export class ParadexAPI {
     const signature = signOrder(
       this.config,
       this.account,
-      {
-        market: orderDetails.market,
-        side: orderDetails.side,
-        type: orderDetails.type,
-        size: orderDetails.size,
-        price: orderDetails.price || "0",
-      },
+      { ...params },
       timestamp,
     );
 
@@ -113,7 +106,7 @@ export class ParadexAPI {
       base: "PARADEX",
       url: API_URL.PARADEX.ORDERS,
       data: {
-        ...orderDetails,
+        ...params,
         signature: signature,
         signature_timestamp: timestamp,
       },
@@ -142,11 +135,4 @@ export async function getSystemConfig(): Promise<SystemConfig> {
         shortString.encodeShortString("PRIVATE_SN_POTC_SEPOLIA"),
     },
   };
-}
-
-export async function listMarkets(): Promise<{ results: Market[] }> {
-  return getRequest({
-    base: "PARADEX",
-    url: API_URL.PARADEX.MARKETS,
-  });
 }

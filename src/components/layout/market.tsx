@@ -10,7 +10,7 @@ import {
   ResponsiveSelectTrigger,
 } from "@/components/ui/responsive-select";
 import { useGetMarkets } from "@/hooks/use-paradex";
-import type { Market as MarketType } from "@/lib/types";
+import type { Market as MarketType } from "@/lib/paradex";
 import { useActionContext } from "@/providers/action";
 import { Card } from "../ui/card";
 import { Skeleton } from "../ui/skeleton";
