@@ -34,23 +34,17 @@ function grindKey(signature: string): string {
 
 export async function createParadexConnection(ethereumAddress: string) {
   try {
-    console.log("🔐 Starting Paradex connection...");
-
     // 1. Get system config from Paradex
     const config = await getSystemConfig();
-    console.log("✅ Got system config");
 
     // 2. Request signature from user (this is the key step!)
     const provider = new ethers.BrowserProvider(window.ethereum);
     const signer = await provider.getSigner();
 
     const message = "Sign this message to access Paradex";
-    console.log("📝 Requesting signature...");
     const signature = await signer.signMessage(message);
-    console.log("✅ Signature received");
 
     // 3. Derive StarkNet keys
-    console.log("⏳ Deriving StarkNet account...");
     const privateKey = grindKey(signature);
     const publicKeyBN = ec.starkCurve.getStarkKey(privateKey);
 
@@ -60,9 +54,6 @@ export async function createParadexConnection(ethereumAddress: string) {
     const addressBN = hash.computeHashOnElements([publicKeyBN, 0]);
     const addressHex = addressBN.toString();
     const address = `0x${addressHex.replace(/^0x/, "").padStart(64, "0")}`;
-
-    console.log("✅ StarkNet Address:", address);
-    console.log("✅ Public Key:", publicKey);
 
     // 4. Create account object
     const account: Account = {
@@ -75,20 +66,14 @@ export async function createParadexConnection(ethereumAddress: string) {
     // 5. Create API instance
     const api = new ParadexAPI(config, account);
 
-    // 6. Onboard user (creates account if doesn't exist)
-    console.log("⏳ Onboarding user...");
+    // 6. Onboard user
     await api.onboardUser();
-    console.log("✅ Onboarding successful - new account created");
 
     // 7. Authenticate and get JWT
-    console.log("⏳ Authenticating...");
     await api.authenticate();
-    console.log("✅ JWT token obtained");
 
     // 8. Verify connection by fetching account
-    console.log("⏳ Verifying connection...");
     const accountInfo = await api.getAccount();
-    console.log("✅ Connected!");
 
     return {
       api,
